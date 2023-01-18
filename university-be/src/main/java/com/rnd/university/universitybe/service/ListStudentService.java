@@ -1,0 +1,37 @@
+package com.rnd.university.universitybe.service;
+
+import com.rnd.university.universitybe.base.BaseService;
+import com.rnd.university.universitybe.model.EmptyRequest;
+import com.rnd.university.universitybe.model.ListStudentResponse;
+import com.rnd.university.universitybe.model.StudentResponse;
+import com.rnd.university.universitybe.repository.StudentRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
+
+@Slf4j
+@Service
+public class ListStudentService implements BaseService<EmptyRequest, ListStudentResponse> {
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Override
+    public ListStudentResponse excute(EmptyRequest request) {
+        log.info("list student..");
+        return ListStudentResponse.builder()
+                .studentResponses(studentRepository.findAll().stream()
+                        .map(response -> StudentResponse.builder()
+                                .studentId(response.getId())
+                                .studentName(response.getName())
+                                .studentPhoneNumber(response.getPhoneNumber())
+                                .studentDateOfBirth(response.getDateOfBirth())
+                                .studentBranch(response.getBranch())
+                                .studentEmail(response.getEmail())
+                                .build())
+                        .collect(Collectors.toList()))
+                .build();
+    }
+}

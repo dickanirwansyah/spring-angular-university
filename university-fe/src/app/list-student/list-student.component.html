@@ -1,0 +1,32 @@
+<div class="col-sm-8">
+    <h4>List Data</h4>
+    <table class="table table-bordered">
+        <thead class="table table-bordered">
+            <tr>
+                <td>No</td>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Branch</th>
+                <th>Phone Number</th>
+                <th>Date Of Birth</th>
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let std of students; let i = index">
+                <td>{{i + 1}}</td>
+                <td>STD{{std.student_id}}</td>
+                <td>{{std.student_name}}</td>
+                <td>{{std.student_email}}</td>
+                <td>{{std.student_branch}}</td>
+                <td>{{std.student_phone_number}}</td>
+                <td>{{std.student_date_of_birth}}</td>
+                <td>
+                    <button (click)="detailIdStudent(std.student_id)" class="btn btn-success">Edit</button>&nbsp;
+                    <button class="btn btn-success">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

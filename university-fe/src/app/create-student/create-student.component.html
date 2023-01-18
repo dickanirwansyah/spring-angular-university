@@ -1,0 +1,115 @@
+<div class="row">
+    <div class="col-sm-4">
+        <div class="container-fluid">
+            <div class="panel panel-default">
+
+                <!--insert-->
+                <div class="panel-body" *ngIf="selectedIdStudent==0">
+                    <form [formGroup]="studentCreateForm" 
+                    #createstudent
+                    (ngSubmit)="createStudent()">
+                        <div class="form-group">
+                          <label for="name">Name:</label>
+                          <input type="name" class="form-control" formControlName="student_name" id="name">
+                        </div>
+                        <div class="form-group">
+                          <label for="email">Email:</label>
+                          <input type="email" class="form-control" formControlName="student_email" id="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="branch">Branch:</label>
+                            <select name="branch" id="branch" formControlName="student_branch" class="form-control">
+                                <option value="0">--Choose Option--</option>
+                                <option value="Teknik Informatika">Teknik Informatika</option>
+                                <option value="Teknik Mesin">Teknik Mesin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="phonenumber">Phone Number:</label>
+                            <input type="text" class="form-control" formControlName="student_phone_number" id="phoneNumber"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="dob">Date Of Birth:</label>
+                            <!--insert-->
+                            <div class="input-group" *ngIf="selectedIdStudent==0">
+                             <input 
+                            type="text" 
+                            formControlName="student_date_of_birth"
+                            class="form-control" 
+                            placeholder="yyyy-MM-dd" 
+                             id="dob"
+                             [(ngModel)]="model"
+                             ngbDatepicker
+                             #d="ngbDatepicker"
+                             />
+                             <span class="input-group-addon" (click)="d.toggle()">
+                                  <i class="glyphicon glyphicon-calendar"></i>
+                            </span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success">Create Student</button>
+                    </form>
+                </div>
+
+                <!--update-->
+                <div class="panel-body" *ngIf="selectedIdStudent!=0">
+                    <form [formGroup]="studentCreateForm" 
+                    #createstudent
+                    (ngSubmit)="updateStudent()">
+                        <!--if edit-->
+                        <div class="form-group" *ngIf="selectedIdStudent != 0">
+                            <label for="name">ID:</label>
+                            <input type="name" formControlName="student_id" 
+                            value="{{selectedIdStudent}}" class="form-control" 
+                            id="id">
+                          </div>
+                        <!--if edit-->
+                        <div class="form-group">
+                          <label for="name">Name:</label>
+                          <input type="name" class="form-control" formControlName="student_name" id="name">
+                        </div>
+                        <div class="form-group">
+                          <label for="email">Email:</label>
+                          <input type="email" class="form-control" formControlName="student_email" id="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="branch">Branch:</label>
+                            <select name="branch" id="branch" formControlName="student_branch" class="form-control">
+                                <option value="0">--Choose Option--</option>
+                                <option value="Teknik Informatika">Teknik Informatika</option>
+                                <option value="Teknik Mesin">Teknik Mesin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="phonenumber">Phone Number:</label>
+                            <input type="text" class="form-control" formControlName="student_phone_number" id="phoneNumber"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="dob">Date Of Birth:</label>
+                            <!--update-->
+                            <div class="input-group" *ngIf="selectedIdStudent!=0">
+                                <input 
+                               type="text" 
+                               formControlName="student_date_of_birth"
+                               class="form-control" 
+                               placeholder="yyyy-MM-dd"
+                               [(ngModel)]="model" 
+                               value="{{currentBirthDateSelected | date: 'yyyy-MM-dd'}}"
+                                id="dob"
+                                ngbDatepicker
+                                #d="ngbDatepicker"
+                                />
+                                <span class="input-group-addon" (click)="d.toggle()">
+                                     <i class="glyphicon glyphicon-calendar"></i>
+                               </span>
+                               </div>
+                        </div>
+                        <button type="submit" class="btn btn-success">Update Student</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-list-student (onSelectedIdStudent)="detailIdStudent($event)"></app-list-student>
+</div>
+
