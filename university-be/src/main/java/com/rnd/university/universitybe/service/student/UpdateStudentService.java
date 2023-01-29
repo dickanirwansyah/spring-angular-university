@@ -1,10 +1,8 @@
-package com.rnd.university.universitybe.service;
+package com.rnd.university.universitybe.service.student;
 
-import javax.validation.Validation;
-
+import com.rnd.university.universitybe.repository.FacultyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.rnd.university.universitybe.base.BaseService;
 import com.rnd.university.universitybe.exception.CustomErrorException;
 import com.rnd.university.universitybe.model.GetIdRequest;
@@ -30,6 +28,9 @@ public class UpdateStudentService implements BaseService<StudentRequest, Validat
 	
 	@Autowired
 	private DetailStudentService detailStudentService;
+
+	@Autowired
+	private FacultyRepository facultyRepository;
 	
 	@Override
 	public ValidationResponse excute(StudentRequest request) {
@@ -56,21 +57,26 @@ public class UpdateStudentService implements BaseService<StudentRequest, Validat
 			}
 		}
 		
-		
-		this.studentRepository.findById(request.getStudentId())
-			.ifPresentOrElse(student -> {
-				student.setName(request.getStudentName());
-				student.setDateOfBirth(request.getStudentDateOfBirth());
-				student.setBranch(request.getStudentBranch());
-				student.setPhoneNumber(request.getStudentPhoneNumber());
-				student.setEmail(request.getStudentEmail());
-				this.studentRepository.save(student);
-			}, ()-> {
-				log.info("id student {} not found ",request.getStudentId());
-				throw new CustomErrorException("sorry id student not found");
-			});
-		
-		
+		this.facultyRepository.findById(request.getStudentFaculty().getFacultyId())
+				.ifPresentOrElse(data -> this.studentRepository.findById(request.getStudentId())
+						.ifPresentOrElse(student -> {
+							student.setName(request.getStudentName());
+							student.setDateOfBirth(request.getStudentDateOfBirth());
+							student.setBranch(request.getStudentBranch());
+							student.setPhoneNumber(request.getStudentPhoneNumber());
+							student.setEmail(request.getStudentEmail());
+							student.setCurrentSemester(request.getStudentCurrentSemester());
+							student.setFacultyId(data.getId());
+							student.setProfileImage(request.getStudentProfileImage() == null ? student.getProfileImage() : request.getStudentProfileImage());
+							this.studentRepository.save(student);
+						}, ()-> {
+							log.info("id student {} not found ",request.getStudentId());
+							throw new CustomErrorException("sorry id student not found");
+						}), ()-> {
+					log.error("error because faculty id {} not found",request.getStudentFaculty().getFacultyId());
+					throw new CustomErrorException("sorry faculty not found");
+				});
+
 		return ValidationResponse.builder()
 				.valid(true)
 				.build();

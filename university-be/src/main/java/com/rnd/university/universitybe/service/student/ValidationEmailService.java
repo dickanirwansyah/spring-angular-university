@@ -1,4 +1,4 @@
-package com.rnd.university.universitybe.service;
+package com.rnd.university.universitybe.service.student;
 
 import com.rnd.university.universitybe.base.BaseService;
 import com.rnd.university.universitybe.model.StudentRequest;

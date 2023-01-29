@@ -1,3 +1,5 @@
+import { ListFacultyComponent } from './list-faculty/list-faculty.component';
+import { CreateFacultyComponent } from './create-faculty/create-faculty.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CreateStudentComponent } from './create-student/create-student.component';
 import { ListStudentComponent } from './list-student/list-student.component';
@@ -21,7 +23,9 @@ import { OverlayModule } from '@angular/cdk/overlay';
   declarations: [
     AppComponent,
     ListStudentComponent,
-    CreateStudentComponent
+    CreateStudentComponent,
+    CreateFacultyComponent,
+    ListFacultyComponent
   ],
   imports: [
     FormsModule,

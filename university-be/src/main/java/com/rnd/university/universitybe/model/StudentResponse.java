@@ -34,6 +34,9 @@ public class StudentResponse extends BaseResponse {
     @JsonProperty("student_email")
     private String studentEmail;
 
+    @JsonProperty("student_faculty")
+    private FacultyResponse studentFaculty;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     @JsonProperty("student_date_of_birth")

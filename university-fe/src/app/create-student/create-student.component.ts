@@ -1,9 +1,10 @@
+import { Faculty } from './../domain/faculty/model/faculty';
+import { FacultyService } from './../domain/faculty/service/faculty.service';
 import { Student } from './../domain/student/model/student';
-import { MatSnackBar } from '@angular/material';
 import { StudentService } from './../domain/student/service/student.service';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 
 @Component({
@@ -11,9 +12,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
     templateUrl: './create-student.component.html'
 })
 export class CreateStudentComponent implements OnInit{
-
-    constructor(private studentService:StudentService, 
-        private snackBar: MatSnackBar){}
 
     student:Student=new Student();
     subitted=false;
@@ -24,6 +22,19 @@ export class CreateStudentComponent implements OnInit{
     selectedIdStudent: number;
     isEdit:boolean;
     currentBirthDateSelected:string|null;
+    listFaculty: Faculty[];
+    form!: FormGroup;
+    result: any;    
+    facultySelected:any;
+    selectedData: any;
+
+    /** using ng model form */
+    createStudent: Student = new Student();
+    editStudent: Student = new Student();
+
+    constructor(private studentService:StudentService,
+        private facultyService:FacultyService,
+        private formBuilder:FormBuilder){}
 
     ngOnInit(): void {
         console.log("this is page create student..")
@@ -31,6 +42,8 @@ export class CreateStudentComponent implements OnInit{
         console.log("detail id selected student -> "+this.selectedIdStudent);
         this.isEdit=false;
         this.selectedIdStudent=0;
+        this.initialDropdownFaculty();
+        this.studentCreateForm();
     }
 
     parse(value:string):NgbDateStruct | null {
@@ -51,59 +64,25 @@ export class CreateStudentComponent implements OnInit{
         return date ? date.year + this.DELIMITER + ('0'+date.month).slice(-2) + this.DELIMITER + ('0'+date.day).slice(-2) : null;
     }
 
-    studentCreateForm = new FormGroup({
-        student_id: new FormControl(''),
-        student_name: new FormControl('', [Validators.required, Validators.minLength(5)]),
-        student_email: new FormControl('', [Validators.required, Validators.minLength(5)]),
-        student_branch: new FormControl(''),
-        student_phone_number: new FormControl('', [Validators.required, Validators.minLength(13)]),
-        student_date_of_birth: new FormControl('', [Validators.required])
-    });
-
-    createStudent(){
-        this.student = new Student();
-        this.student.student_name = this.studentCreateForm.get('student_name')?.value!;
-        this.student.student_email = this.studentCreateForm.get('student_email')?.value!;
-        this.student.student_phone_number = this.studentCreateForm.get('student_phone_number')?.value!;
-        this.student.student_date_of_birth = this.toModel(this.model)!;
-        this.student.student_branch = this.studentCreateForm.get('student_branch')?.value!;
-        
-        console.log("create student="+JSON.stringify(this.student));
-        console.log("execute service..")
-        this.studentService.doCallCreateStudent(this.student)
-            .subscribe(data => {
-                console.log(JSON.stringify(data));
-                this.student = new Student();
-                this.studentCreateForm.reset();
-                console.log("success create data")
-            },err => {
-                console.log("error because="+JSON.stringify(err.error));
-                alert(JSON.stringify(err.error.message));
-            });
+    studentCreateForm(){
+        this.form = this.formBuilder.group({
+            student_id: new FormControl(''),
+            student_name: new FormControl('', [Validators.required, Validators.minLength(5)]),
+            student_branch: new FormControl(''),
+            student_email: new FormControl('',[Validators.required]),
+            student_phone_number: new FormControl('', [Validators.required, Validators.minLength(13)]),
+            student_date_of_birth: new FormControl('', [Validators.required]),
+            student_faculty: this.studentFacultyForm(),
+            student_faculty_id: new FormControl('')
+        })
     }
 
-    updateStudent(){
-        this.student = new Student();
-        var studentId = this.studentCreateForm.get('student_id')?.value!;
-        this.student.student_id = studentId;
-        this.student.student_branch=this.studentCreateForm.get('student_branch')?.value!;
-        this.student.student_email=this.studentCreateForm.get('student_email')?.value!;
-        this.student.student_phone_number=this.studentCreateForm.get('student_phone_number')?.value!;
-        this.student.student_name=this.studentCreateForm.get('student_name')?.value!;
-        this.student.student_date_of_birth=this.toModel(this.model)!;
-
-        console.log("update student="+JSON.stringify(this.student));
-        console.log("execute service..");
-        this.studentService.doCallUpdateStudent(this.student)
-            .subscribe(response => {
-                console.log(JSON.stringify(response));
-                this.student = new Student();
-                this.studentCreateForm.reset();
-            },err=>{
-                console.log(err.error);
-                alert(JSON.stringify(err.error.message));
-            });
-        
+    studentFacultyForm(){
+        return this.formBuilder.group({
+            faculty_id: new FormControl('', [Validators.required]),
+            faculty_name: new FormControl('', [Validators.required]),
+            faculty_activated: new FormControl('', [Validators.required])
+        });
     }
 
     detailIdStudent(id:number){
@@ -113,17 +92,61 @@ export class CreateStudentComponent implements OnInit{
             .subscribe(response => {
                 var dataParse = JSON.parse(JSON.stringify(response.data));
                 console.log("response detail student->"+JSON.stringify(response.data));
-                this.studentCreateForm.get('student_id')?.setValue(dataParse.student_id);
-                this.studentCreateForm.get('student_name')?.setValue(dataParse.student_name);
-                this.studentCreateForm.get('student_email')?.setValue(dataParse.student_email);
-                this.studentCreateForm.get('student_phone_number')?.setValue(dataParse.student_phone_number);
-                this.studentCreateForm.get('student_branch')?.setValue(dataParse.student_branch);
-                this.studentCreateForm.get('student_date_of_birth')?.setValue(dataParse.student_date_of_birth);
+                
+                // this.editStudent = {
+                //     student_id : response.data.student_id,
+                //     student_name : response.data.student_name,
+                //     student_phone_number : response.data.student_phone_number,
+                //     student_branch: response.data.student_branch,
+                //     student_email: response.data.student_email,
+                //     student_faculty: response.data.student_faculty,
+                //     student_date_of_birth: response.data.student_date_of_birth,
+                //     student_faculty_id: response.data.student_faculty.faculty_id
+                // }
+                // console.log("data after selected model -> "+JSON.stringify(this.editStudent));
+                // this.model = this.parse(dataParse.student_date_of_birth)!;
+
+                this.form.get('student_id')?.setValue(dataParse.student_id);
+                this.form.get('student_name')?.setValue(dataParse.student_name);
+                this.form.get('student_email')?.setValue(dataParse.student_email);
+                this.form.get('student_phone_number')?.setValue(dataParse.student_phone_number);
+                this.form.get('student_branch')?.setValue(dataParse.student_branch);
+                this.form.get('student_date_of_birth')?.setValue(dataParse.student_date_of_birth);
                 this.model = this.parse(dataParse.student_date_of_birth)!;
                 console.log("model data after parse -> "+JSON.stringify(this.model));
                 this.currentBirthDateSelected = dataParse.student_date_of_birth;
-                console.log("current birthday selected -> "+this.currentBirthDateSelected);
+                this.facultySelected = dataParse.student_faculty;
+                console.log("faculty convert ->"+JSON.stringify(this.facultySelected));
+                
+                for (let i=0; i < this.listFaculty.length; i++){
+                    if (this.facultySelected.faculty_id == this.listFaculty[i].faculty_id){
+                        this.listFaculty[i];
+                        console.log("faculty filter -> "+JSON.stringify(this.listFaculty[i]));
+                        this.form.get('student_faculty_id')?.setValue(this.listFaculty[i].faculty_id)
+                        this.form.get('student_faculty')?.setValue(this.listFaculty[i])
+                    }
+                }
+
             },err => console.log(err.error));
+    }
+
+    initialDropdownFaculty(){
+        this.facultyService.doCallListFaculty().subscribe(data => {
+            this.listFaculty = data.data.listFaculty;
+            console.log("response faculty->"+JSON.stringify(this.listFaculty));
+        },error => console.log(error));
+    }
+
+    onSave(){
+        console.log("execute save..");
+        console.log("data -> "+this.form.getRawValue());
+        /** save data */
+    }
+
+    onUpdate(){
+        console.log("execute update..");
+        console.log("data -> "+JSON.stringify(this.form.getRawValue()));
+        /** update data */
     }
 
 }

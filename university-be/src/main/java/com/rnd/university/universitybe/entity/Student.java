@@ -36,4 +36,14 @@ public class Student implements Serializable {
 
     @Column(name = "data_of_birth", nullable = false)
     private Date dateOfBirth;
+
+    @Column(name = "current_semester")
+    private Integer currentSemester;
+    
+    @Column(name = "faculty_id")
+    private Long facultyId;
+    
+    @Lob
+    @Column(name = "profile_image", columnDefinition = "text")
+    private String profileImage;
 }

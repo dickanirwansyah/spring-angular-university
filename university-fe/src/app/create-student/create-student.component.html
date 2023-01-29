@@ -5,9 +5,7 @@
 
                 <!--insert-->
                 <div class="panel-body" *ngIf="selectedIdStudent==0">
-                    <form [formGroup]="studentCreateForm" 
-                    #createstudent
-                    (ngSubmit)="createStudent()">
+                    <form [formGroup]="form">
                         <div class="form-group">
                           <label for="name">Name:</label>
                           <input type="name" class="form-control" formControlName="student_name" id="name">
@@ -20,8 +18,16 @@
                             <label for="branch">Branch:</label>
                             <select name="branch" id="branch" formControlName="student_branch" class="form-control">
                                 <option value="0">--Choose Option--</option>
-                                <option value="Teknik Informatika">Teknik Informatika</option>
-                                <option value="Teknik Mesin">Teknik Mesin</option>
+                                <option value="MAN">MAN</option>
+                                <option value="SMA">SMA</option>
+                                <option value="SMK">SMK</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="faculty">Faculty:</label>
+                            <select name="student_faculty" formControlName="student_faculty" id="faculty" class="form-control">
+                                <option value="0">--Choose Option--</option>
+                                <option *ngFor="let faculty of listFaculty" value="{{faculty.faculty_id}}">{{faculty.faculty_name}}</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -47,19 +53,17 @@
                             </span>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success">Create Student</button>
+                        <button type="button" (click)="onSave()" class="btn btn-success">Create Student</button>
                     </form>
                 </div>
 
                 <!--update-->
                 <div class="panel-body" *ngIf="selectedIdStudent!=0">
-                    <form [formGroup]="studentCreateForm" 
-                    #createstudent
-                    (ngSubmit)="updateStudent()">
+                    <form [formGroup]="form">
                         <!--if edit-->
                         <div class="form-group" *ngIf="selectedIdStudent != 0">
                             <label for="name">ID:</label>
-                            <input type="name" formControlName="student_id" 
+                            <input type="name" formControlName="student_id"
                             value="{{selectedIdStudent}}" class="form-control" 
                             id="id">
                           </div>
@@ -74,15 +78,31 @@
                         </div>
                         <div class="form-group">
                             <label for="branch">Branch:</label>
-                            <select name="branch" id="branch" formControlName="student_branch" class="form-control">
+                            <select name="branch" id="branch"
+                            formControlName="student_branch"
+                            class="form-control">
                                 <option value="0">--Choose Option--</option>
-                                <option value="Teknik Informatika">Teknik Informatika</option>
-                                <option value="Teknik Mesin">Teknik Mesin</option>
+                                <option value="MAN">MAN</option>
+                                <option value="SMA">SMA</option>
+                                <option value="SMK">SMK</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="faculty">Faculty:</label>
+                            <select id="student_faculty"
+                            formControlName="student_faculty_id"
+                             class="form-control">
+                                <option *ngFor="let faculty of listFaculty" 
+                                [value]="faculty.faculty_id">
+                                    {{faculty.faculty_name}}
+                                </option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="phonenumber">Phone Number:</label>
-                            <input type="text" class="form-control" formControlName="student_phone_number" id="phoneNumber"/>
+                            <input type="text" class="form-control" 
+                            formControlName="student_phone_number"
+                            id="phoneNumber"/>
                         </div>
                         <div class="form-group">
                             <label for="dob">Date Of Birth:</label>
@@ -90,10 +110,10 @@
                             <div class="input-group" *ngIf="selectedIdStudent!=0">
                                 <input 
                                type="text" 
-                               formControlName="student_date_of_birth"
                                class="form-control" 
                                placeholder="yyyy-MM-dd"
                                [(ngModel)]="model" 
+                               [ngModelOptions]="{standalone: true}"
                                value="{{currentBirthDateSelected | date: 'yyyy-MM-dd'}}"
                                 id="dob"
                                 ngbDatepicker
@@ -104,7 +124,7 @@
                                </span>
                                </div>
                         </div>
-                        <button type="submit" class="btn btn-success">Update Student</button>
+                        <button type="button" (click)="onUpdate()" class="btn btn-success">Update Student</button>
                     </form>
                 </div>
             </div>

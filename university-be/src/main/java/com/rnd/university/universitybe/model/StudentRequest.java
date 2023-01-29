@@ -26,6 +26,7 @@ public class StudentRequest extends BaseRequest {
     @JsonProperty("student_email")
     private String studentEmail;
 
+    /** SMA, SMK, MAN **/
     @JsonProperty("student_branch")
     private String studentBranch;
 
@@ -36,4 +37,13 @@ public class StudentRequest extends BaseRequest {
     @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     @JsonProperty("student_date_of_birth")
     private Date studentDateOfBirth;
+    
+    @JsonProperty("student_profile_image")
+    private String studentProfileImage;
+
+    @JsonProperty("student_faculty")
+    private FacultyRequest studentFaculty;
+    
+    @JsonProperty("student_current_semester")
+    private Integer studentCurrentSemester;
 }

@@ -4,10 +4,10 @@ import com.rnd.university.universitybe.model.EmptyRequest;
 import com.rnd.university.universitybe.model.GetIdRequest;
 import com.rnd.university.universitybe.model.RestResponse;
 import com.rnd.university.universitybe.model.StudentRequest;
-import com.rnd.university.universitybe.service.CreateStudentService;
-import com.rnd.university.universitybe.service.DetailStudentService;
-import com.rnd.university.universitybe.service.ListStudentService;
-import com.rnd.university.universitybe.service.UpdateStudentService;
+import com.rnd.university.universitybe.service.student.CreateStudentService;
+import com.rnd.university.universitybe.service.student.DetailStudentService;
+import com.rnd.university.universitybe.service.student.ListStudentService;
+import com.rnd.university.universitybe.service.student.UpdateStudentService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
