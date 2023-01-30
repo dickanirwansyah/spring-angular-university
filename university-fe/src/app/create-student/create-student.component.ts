@@ -86,6 +86,7 @@ export class CreateStudentComponent implements OnInit{
         });
     }
 
+
     detailIdStudent(id:number){
         this.selectedIdStudent = id;
         console.log("from create component detail id student -> "+id);
@@ -119,6 +120,7 @@ export class CreateStudentComponent implements OnInit{
 
             },err => console.log(err.error));
     }
+
 
     initialDropdownFaculty(){
         this.facultyService.doCallListFaculty().subscribe(data => {

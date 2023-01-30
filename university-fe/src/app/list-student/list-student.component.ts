@@ -33,4 +33,15 @@ export class ListStudentComponent implements OnInit{
         this.selectedIdStudent = id;
         this.onSelectedIdStudent.emit(this.selectedIdStudent);
     }
+
+    deleteIdStudent(id:number){
+        console.log("delete id student -> "+id);
+        this.selectedIdStudent = id;
+        this.onSelectedIdStudent.emit(this.selectedIdStudent);
+        this.studentService.doCallDeleteStudent(id)
+            .subscribe(response => {
+                console.log("response delete -> "+JSON.stringify(response));
+                window.location.reload();
+            }, err => console.log(err.error));
+    }
 }

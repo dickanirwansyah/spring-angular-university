@@ -27,7 +27,7 @@
                 <td>{{std.student_current_semester}}</td>
                 <td>
                     <button (click)="detailIdStudent(std.student_id)" class="btn btn-success">Edit</button>&nbsp;
-                    <button class="btn btn-success">Delete</button>
+                    <button (click)="deleteIdStudent(std.student_id)" class="btn btn-success">Delete</button>
                 </td>
             </tr>
         </tbody>

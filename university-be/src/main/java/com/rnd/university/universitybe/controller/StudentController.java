@@ -5,6 +5,7 @@ import com.rnd.university.universitybe.model.GetIdRequest;
 import com.rnd.university.universitybe.model.RestResponse;
 import com.rnd.university.universitybe.model.StudentRequest;
 import com.rnd.university.universitybe.service.student.CreateStudentService;
+import com.rnd.university.universitybe.service.student.DeleteStudentService;
 import com.rnd.university.universitybe.service.student.DetailStudentService;
 import com.rnd.university.universitybe.service.student.ListStudentService;
 import com.rnd.university.universitybe.service.student.UpdateStudentService;
@@ -28,6 +29,9 @@ public class StudentController {
 
     @Autowired
     private UpdateStudentService updateStudentService;
+    
+    @Autowired
+    private DeleteStudentService deleteStudentService;
     
     @PostMapping(value = "/create")
     public ResponseEntity<RestResponse> create(@RequestBody StudentRequest request){
@@ -55,5 +59,14 @@ public class StudentController {
     public ResponseEntity<RestResponse> update(@RequestBody StudentRequest request){
     	return ResponseEntity.ok(RestResponse
     			.success(this.updateStudentService.excute(request)));
+    }
+    
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseEntity<RestResponse> delete(@PathVariable("id")Long id){
+    	return ResponseEntity.ok(RestResponse
+    			.success(this.deleteStudentService.excute(GetIdRequest
+    					.builder()
+    					.id(id)
+    					.build())));
     }
 }

@@ -28,4 +28,8 @@ export class StudentService {
     public doCallUpdateStudent(student:object):Observable<object>{
         return this.http.post(`${this.baseUrl}/update`, student);
     }
+
+    public doCallDeleteStudent(id:number):Observable<any> {
+        return this.http.delete(`${this.baseUrl}/delete/`+id);
+    }
 }
