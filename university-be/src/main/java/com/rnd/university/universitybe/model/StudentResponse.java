@@ -41,4 +41,7 @@ public class StudentResponse extends BaseResponse {
     @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     @JsonProperty("student_date_of_birth")
     private Date studentDateOfBirth;
+    
+    @JsonProperty("student_current_semester")
+    private Integer studentCurrentSemester;
 }

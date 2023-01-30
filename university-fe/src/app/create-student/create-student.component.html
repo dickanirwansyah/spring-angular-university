@@ -24,10 +24,30 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="faculty">Faculty:</label>
-                            <select name="student_faculty" formControlName="student_faculty" id="faculty" class="form-control">
+                            <label for="semster">Semester:</label>
+                            <select name="semester" class="form-control" formControlName="student_current_semester">
                                 <option value="0">--Choose Option--</option>
-                                <option *ngFor="let faculty of listFaculty" value="{{faculty.faculty_id}}">{{faculty.faculty_name}}</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="faculty">Faculty:</label>
+                            <select name="student_faculty" formControlName="student_faculty_id" id="faculty" class="form-control">
+                                <option value="0">--Choose Option--</option>
+                                <option *ngFor="let faculty of listFaculty" [value]="faculty.faculty_id">{{faculty.faculty_name}}</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -85,6 +105,26 @@
                                 <option value="MAN">MAN</option>
                                 <option value="SMA">SMA</option>
                                 <option value="SMK">SMK</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="semster">Semester:</label>
+                            <select name="semester" class="form-control" formControlName="student_current_semester">
+                                <option value="0">--Choose Option--</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
                             </select>
                         </div>
                         <div class="form-group">

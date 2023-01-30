@@ -36,6 +36,7 @@ public class ListStudentService implements BaseService<EmptyRequest, ListStudent
                                 .studentDateOfBirth(response.getDateOfBirth())
                                 .studentBranch(response.getBranch())
                                 .studentEmail(response.getEmail())
+                                .studentCurrentSemester(response.getCurrentSemester())
                                 .studentFaculty(this.facultyRepository.findById(response.getFacultyId())
                                         .map(data -> FacultyResponse
                                                 .builder()

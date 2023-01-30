@@ -35,7 +35,7 @@ public class Student implements Serializable {
     private String phoneNumber;
 
     @Column(name = "data_of_birth", nullable = false)
-    private Date dateOfBirth;
+    private Date dateOfBirth;	
 
     @Column(name = "current_semester")
     private Integer currentSemester;

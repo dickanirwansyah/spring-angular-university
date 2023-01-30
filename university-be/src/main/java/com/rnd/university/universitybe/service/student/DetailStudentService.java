@@ -32,6 +32,7 @@ public class DetailStudentService implements BaseService<GetIdRequest, StudentRe
                         .studentBranch(response.getBranch())
                         .studentDateOfBirth(response.getDateOfBirth())
                         .studentPhoneNumber(response.getPhoneNumber())
+                        .studentCurrentSemester(response.getCurrentSemester())
                         .studentFaculty(this.facultyRepository.findById(response.getFacultyId())
                                 .map(data -> FacultyResponse.builder()
                                         .facultyId(data.getId())

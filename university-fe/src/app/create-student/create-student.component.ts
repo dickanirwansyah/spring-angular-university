@@ -73,7 +73,8 @@ export class CreateStudentComponent implements OnInit{
             student_phone_number: new FormControl('', [Validators.required, Validators.minLength(13)]),
             student_date_of_birth: new FormControl('', [Validators.required]),
             student_faculty: this.studentFacultyForm(),
-            student_faculty_id: new FormControl('')
+            student_faculty_id: new FormControl(''),
+            student_current_semester: new FormControl('')
         })
     }
 
@@ -93,18 +94,6 @@ export class CreateStudentComponent implements OnInit{
                 var dataParse = JSON.parse(JSON.stringify(response.data));
                 console.log("response detail student->"+JSON.stringify(response.data));
                 
-                // this.editStudent = {
-                //     student_id : response.data.student_id,
-                //     student_name : response.data.student_name,
-                //     student_phone_number : response.data.student_phone_number,
-                //     student_branch: response.data.student_branch,
-                //     student_email: response.data.student_email,
-                //     student_faculty: response.data.student_faculty,
-                //     student_date_of_birth: response.data.student_date_of_birth,
-                //     student_faculty_id: response.data.student_faculty.faculty_id
-                // }
-                // console.log("data after selected model -> "+JSON.stringify(this.editStudent));
-                // this.model = this.parse(dataParse.student_date_of_birth)!;
 
                 this.form.get('student_id')?.setValue(dataParse.student_id);
                 this.form.get('student_name')?.setValue(dataParse.student_name);
@@ -113,6 +102,7 @@ export class CreateStudentComponent implements OnInit{
                 this.form.get('student_branch')?.setValue(dataParse.student_branch);
                 this.form.get('student_date_of_birth')?.setValue(dataParse.student_date_of_birth);
                 this.model = this.parse(dataParse.student_date_of_birth)!;
+                this.form.get('student_current_semester')?.setValue(dataParse.student_current_semester);
                 console.log("model data after parse -> "+JSON.stringify(this.model));
                 this.currentBirthDateSelected = dataParse.student_date_of_birth;
                 this.facultySelected = dataParse.student_faculty;
@@ -139,14 +129,57 @@ export class CreateStudentComponent implements OnInit{
 
     onSave(){
         console.log("execute save..");
-        console.log("data -> "+this.form.getRawValue());
-        /** save data */
+    
+        var dataSelected = JSON.parse(JSON.stringify(this.form.getRawValue()));
+        console.log("selected faculty create -> ",dataSelected['student_faculty_id']);
+
+        for (let i=0; i < this.listFaculty.length; i++){
+            if (dataSelected['student_faculty_id'] == this.listFaculty[i].faculty_id){
+                this.listFaculty[i];
+                console.log("faculty filter -> "+JSON.stringify(this.listFaculty[i]));
+                this.form.get('student_faculty_id')?.setValue(this.listFaculty[i].faculty_id)
+                this.form.get('student_faculty')?.setValue(this.listFaculty[i])
+            }
+        }
+        this.form.get('student_id')?.setValue(0);
+        this.form.get('student_date_of_birth')?.setValue(this.toModel(this.model));
+        console.log("request data save -> "+JSON.stringify(this.form.getRawValue()));
+
+        /** excute save */
+        this.studentService.doCallCreateStudent(this.form.getRawValue())
+            .subscribe(response => {
+                console.log("response save = "+JSON.stringify(response));
+                this.form.reset();
+                window.location.reload();
+            },err => err.error);
     }
 
     onUpdate(){
         console.log("execute update..");
         console.log("data -> "+JSON.stringify(this.form.getRawValue()));
         /** update data */
+
+        var dataSelected = JSON.parse(JSON.stringify(this.form.getRawValue()));
+        console.log("selected faculty create -> ",dataSelected['student_faculty_id']);
+
+        for (let i=0; i < this.listFaculty.length; i++){
+            if (dataSelected['student_faculty_id'] == this.listFaculty[i].faculty_id){
+                this.listFaculty[i];
+                console.log("faculty filter -> "+JSON.stringify(this.listFaculty[i]));
+                this.form.get('student_faculty_id')?.setValue(this.listFaculty[i].faculty_id)
+                this.form.get('student_faculty')?.setValue(this.listFaculty[i])
+            }
+        }
+        this.form.get('student_date_of_birth')?.setValue(this.toModel(this.model));
+        console.log("request data update -> "+JSON.stringify(this.form.getRawValue()));
+
+        /** excute update */
+        this.studentService.doCallUpdateStudent(this.form.getRawValue())
+            .subscribe(response => {
+                console.log("response update -> "+JSON.stringify(response));
+                this.form.reset();
+                window.location.reload();
+            }, err => err.error);
     }
 
 }

@@ -9,4 +9,5 @@ export class Student {
     student_date_of_birth: string;
     student_faculty: Faculty;
     student_faculty_id: number;
+    student_current_semester: number;
 }
